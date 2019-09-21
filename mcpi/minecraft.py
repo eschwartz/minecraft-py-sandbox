@@ -34,18 +34,21 @@ def intFloor(*args):
 class CmdPositioner:
     """Methods for setting and getting positions"""
 
-    def __init__(self, connection, packagePrefix):
+    def __init__(self, connection: Connection, packagePrefix, id=None):
         self.conn = connection
         self.pkg = packagePrefix
+        self.id = id
 
-    def getPos(self, id):
+    def getPos(self, id=None):
         """Get entity position (entityId:int) => Vec3"""
-        s = self.conn.sendReceive(self.pkg + b".getPos", id)
+        s = self.conn.sendReceive(self.pkg + b".getPos", id or self.id)
         return Vec3(*list(map(float, s.split(","))))
 
-    def setPos(self, id, *args):
+    def setPos(self, *args):
         """Set entity position (entityId:int, x,y,z)"""
-        self.conn.send(self.pkg + b".setPos", id, args)
+        if self.id:
+            args = (self.id,) + args
+        self.conn.send(self.pkg + b".setPos", args)
 
     def getTilePos(self, id):
         """Get entity tile position (entityId:int) => Vec3"""
@@ -78,8 +81,8 @@ class CmdPositioner:
 class CmdEntity(CmdPositioner):
     """Methods for entities"""
 
-    def __init__(self, connection):
-        CmdPositioner.__init__(self, connection, b"entity")
+    def __init__(self, connection, id=None):
+        CmdPositioner.__init__(self, connection, b"entity", id)
 
 
 class CmdPlayer(CmdPositioner):
@@ -196,8 +199,10 @@ class Minecraft:
         """Set a cuboid of blocks (x0,y0,z0,x1,y1,z1,id,[data])"""
         self.conn.send(b"world.setBlocks", intFloor(args))
 
-    def spawnEntity(self, x, y, z, entity: Entity):
-        return int(self.conn.sendReceive(b"world.spawnEntity", x, y, z, entity.id))
+    def spawnEntity(self, x, y, z, entity: Entity) -> CmdEntity:
+        entity_id = int(self.conn.sendReceive(
+            b"world.spawnEntity", x, y, z, entity.id))
+        return CmdEntity(self.conn, entity_id)
 
     def getHeight(self, *args):
         """Get the height of the world (x,z) => int"""

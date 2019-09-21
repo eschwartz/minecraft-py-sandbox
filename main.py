@@ -15,12 +15,10 @@ mc = Minecraft.create(address=ec2_server_ip)
 flower = 38
 
 x, y, z = mc.player.getPos()
-entId = mc.spawnEntity(x + 1, y, z, SHEEP)
+entity = mc.spawnEntity(x + 1, y, z, SHEEP)
 
 while True:
-    x, y, z = mc.conn.sendReceive(b"entity.getPos", entId).split(',')
-    x, y, z = [float(x), float(y), float(z)]
-
-    mc.conn.send(b"entity.setPos", entId, str(x + 1), str(y), str(z))
+    x, y, z = entity.getPos()
+    entity.setPos(x + 1, y, z)
 
     sleep(1)
