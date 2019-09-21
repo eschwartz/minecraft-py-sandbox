@@ -1,3 +1,4 @@
+from mcpi.entity import Entity
 from .connection import Connection
 from .vec3 import Vec3
 from .event import BlockEvent, ChatEvent
@@ -25,11 +26,14 @@ ng [] that flattens to nothing)
 - getPlayerEntityId()
 - pollChatPosts() """
 
+
 def intFloor(*args):
     return [int(math.floor(x)) for x in flatten(args)]
 
+
 class CmdPositioner:
     """Methods for setting and getting positions"""
+
     def __init__(self, connection, packagePrefix):
         self.conn = connection
         self.pkg = packagePrefix
@@ -67,36 +71,45 @@ class CmdPositioner:
 
     def setting(self, setting, status):
         """Set a player setting (setting, status). keys: autojump"""
-        self.conn.send(self.pkg + b".setting", setting, 1 if bool(status) else 0)
-
+        self.conn.send(self.pkg + b".setting", setting,
+                       1 if bool(status) else 0)
 
 
 class CmdEntity(CmdPositioner):
     """Methods for entities"""
+
     def __init__(self, connection):
         CmdPositioner.__init__(self, connection, b"entity")
 
 
 class CmdPlayer(CmdPositioner):
     """Methods for the host (Raspberry Pi) player"""
+
     def __init__(self, connection):
         CmdPositioner.__init__(self, connection, b"player")
         self.conn = connection
 
     def getPos(self):
         return CmdPositioner.getPos(self, [])
+
     def setPos(self, *args):
         return CmdPositioner.setPos(self, [], args)
+
     def getTilePos(self):
         return CmdPositioner.getTilePos(self, [])
+
     def setTilePos(self, *args):
         return CmdPositioner.setTilePos(self, [], args)
+
     def getDirection(self):
         return CmdPositioner.getDirection(self, [])
+
     def getRotation(self):
         return CmdPositioner.getRotation(self, [])
+
     def getPitch(self):
         return CmdPositioner.getPitch(self, [])
+
 
 class CmdCamera:
     def __init__(self, connection):
@@ -121,6 +134,7 @@ class CmdCamera:
 
 class CmdEvents:
     """Events"""
+
     def __init__(self, connection):
         self.conn = connection
 
@@ -140,16 +154,17 @@ class CmdEvents:
         events = [e for e in s.split("|") if e]
         return [ChatEvent.Post(int(e[:e.find(",")]), e[e.find(",") + 1:]) for e in events]
 
+
 class Minecraft:
     """The main class to interact with a running instance of Minecraft Pi."""
-    def __init__(self, connection):
+
+    def __init__(self, connection: Connection):
         self.conn = connection
 
         self.camera = CmdCamera(connection)
         self.entity = CmdEntity(connection)
         self.player = CmdPlayer(connection)
         self.events = CmdEvents(connection)
-
 
     # TODO move to player
     def getTargetBlock(self):
@@ -181,6 +196,9 @@ class Minecraft:
         """Set a cuboid of blocks (x0,y0,z0,x1,y1,z1,id,[data])"""
         self.conn.send(b"world.setBlocks", intFloor(args))
 
+    def spawnEntity(self, x, y, z, entity: Entity):
+        return int(self.conn.sendReceive(b"world.spawnEntity", x, y, z, entity.id))
+
     def getHeight(self, *args):
         """Get the height of the world (x,z) => int"""
         return int(self.conn.sendReceive(b"world.getHeight", intFloor(args)))
@@ -211,7 +229,7 @@ class Minecraft:
         self.conn.send(b"world.setting", setting, 1 if bool(status) else 0)
 
     @staticmethod
-    def create(address = "localhost", port = 4711):
+    def create(address="localhost", port=4711):
         return Minecraft(Connection(address, port))
 
 
