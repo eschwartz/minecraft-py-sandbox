@@ -26,3 +26,4 @@ class Entity:
 
 
 SHEEP = Entity(91)
+PARROT = Entity(105)

@@ -1,6 +1,6 @@
 from time import sleep
 
-from mcpi.entity import SHEEP
+from mcpi.entity import SHEEP, PARROT
 from mcpi.minecraft import Minecraft
 
 
@@ -14,11 +14,32 @@ ec2_server_ip = "3.222.216.215"
 mc = Minecraft.create(address=ec2_server_ip)
 flower = 38
 
-x, y, z = mc.player.getPos()
-entity = mc.spawnEntity(x + 1, y, z, SHEEP)
+while True:
+    x, y, z = mc.player.getPos()
+    try:
+        parrot = mc.spawnEntity(x + 1, y, z, PARROT)
+        if parrot.id:
+            print(f"Created sheep {parrot.id}")
+            break
+    except:
+        pass
 
 while True:
-    x, y, z = entity.getPos()
-    entity.setPos(x + 1, y, z)
+    x, y, z = mc.player.getPos()
+    sX, sY, sZ = parrot.getPos()
+    print(f"Player: {x}, {y}, {z}  -  Sheep: {sX}, {sY}, {sZ}")
+    parrot.setPos(x + 1, y, z)
 
-    sleep(1)
+    # break block in front
+    mc.breakBlockNaturally(x + 1, y - 1, z)
+
+
+# while True:
+#     x, y, z = entity.getPos()
+#     print(f"Sheep: {x}, {y}, {z}")
+#
+#     entity.setPos(x + 1, y, z)
+#
+#     print(f"Player: {mc.player.getPos()}")
+#
+#     sleep(0.5)
