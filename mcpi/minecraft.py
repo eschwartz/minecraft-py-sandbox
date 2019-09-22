@@ -50,6 +50,9 @@ class CmdPositioner:
             args = (self.id,) + args
         self.conn.send(self.pkg + b".setPos", args)
 
+    def setRotation(self, rotation):
+        self.conn.send(self.pkg + b".setRotation", self.id, rotation)
+
     def getTilePos(self, id):
         """Get entity tile position (entityId:int) => Vec3"""
         s = self.conn.sendReceive(self.pkg + b".getTile", id)

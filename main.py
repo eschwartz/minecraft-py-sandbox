@@ -1,6 +1,6 @@
 from time import sleep
 
-from mcpi.entity import SHEEP, PARROT
+from mcpi.entity import SHEEP, PARROT, LLAMA
 from mcpi.minecraft import Minecraft
 
 
@@ -17,21 +17,39 @@ flower = 38
 while True:
     x, y, z = mc.player.getPos()
     try:
-        parrot = mc.spawnEntity(x + 1, y, z, PARROT)
-        if parrot.id:
-            print(f"Created sheep {parrot.id}")
+        bot = mc.spawnEntity(x + 1, y, z, LLAMA)
+        if bot.id:
+            print(f"Created animal {bot.id}")
             break
     except:
         pass
 
-while True:
-    x, y, z = mc.player.getPos()
-    sX, sY, sZ = parrot.getPos()
-    print(f"Player: {x}, {y}, {z}  -  Sheep: {sX}, {sY}, {sZ}")
-    parrot.setPos(x + 1, y, z)
+sleep(3)
 
-    # break block in front
+x, y, z = bot.getPos()
+
+while True:
+    bot.setPos(x, y, z)
+
+    # break block in front / below
     mc.breakBlockNaturally(x + 1, y - 1, z)
+    # break block above that
+    mc.breakBlockNaturally(x + 1, y, z)
+    mc.breakBlockNaturally(x + 1, y + 1, z)
+
+    # Move down/forward one
+    bot.setPos(x + 1, y - 1, z)
+    x, y, z = bot.getPos()
+
+
+# while True:
+#     x, y, z = mc.player.getPos()
+#     sX, sY, sZ = bot.getPos()
+#     print(f"Player: {x}, {y}, {z}  -  Sheep: {sX}, {sY}, {sZ}")
+#     bot.setPos(x + 1, y, z)
+#
+#     # break block in front
+#     mc.breakBlockNaturally(x + 1, y - 1, z)
 
 
 # while True:
