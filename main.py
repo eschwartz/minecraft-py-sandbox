@@ -28,6 +28,19 @@ sleep(3)
 
 x, y, z = bot.getPos()
 
+# Current status:
+#   entities move on their own, making them hard to control,
+#       need to set tick rate too high or they move away. But then hard to track
+#
+# Idea:
+#   Bukkit side: add `spawnBot` endpoint.
+#       creates entity same as spawnEntity, but tracks in a hashmap of `{ <entId>: Bot(loc=Loc), }`
+#       then adds event to constantly teleport entity to same location.
+#       `setPos` endpoint then modifies that hashmap.
+#
+#   or, we need something with a custom entity, and dig into that entity code to
+#   see what can be hacked
+
 while True:
     bot.setPos(x, y, z)
 
