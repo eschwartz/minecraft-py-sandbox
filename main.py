@@ -1,6 +1,6 @@
 from time import sleep
 
-from mcpi.entity import SHEEP, PARROT, LLAMA
+from mcpi.entity import SHEEP, PARROT, LLAMA, ENDERMAN
 from mcpi.minecraft import Minecraft
 
 
@@ -13,20 +13,26 @@ def break_target():
 ec2_server_ip = "3.222.216.215"
 mc = Minecraft.create(address=ec2_server_ip)
 flower = 38
+#
+# while True:
+#     x, y, z = mc.player.getPos()
+#     print(f"X: {x}, Y: {y}, Z: {z}")
+#     try:
+#         bot = mc.spawnEntity(x + 1, y, z, LLAMA)
+#         if bot.id:
+#             print(f"Created animal {bot.id}")
+#             break
+#     except:
+#         pass
+#
+# sleep(3)
 
+
+myX, myY, myZ = mc.player.getPos()
 while True:
-    x, y, z = mc.player.getPos()
-    try:
-        bot = mc.spawnEntity(x + 1, y, z, LLAMA)
-        if bot.id:
-            print(f"Created animal {bot.id}")
-            break
-    except:
-        pass
+    mc.spawnEntity(myX, myY + 300, myZ, LLAMA)
+    sleep(2)
 
-sleep(3)
-
-x, y, z = bot.getPos()
 
 # Current status:
 #   entities move on their own, making them hard to control,
@@ -41,18 +47,18 @@ x, y, z = bot.getPos()
 #   or, we need something with a custom entity, and dig into that entity code to
 #   see what can be hacked
 
-while True:
-    bot.setPos(x, y, z)
-
-    # break block in front / below
-    mc.breakBlockNaturally(x + 1, y - 1, z)
-    # break block above that
-    mc.breakBlockNaturally(x + 1, y, z)
-    mc.breakBlockNaturally(x + 1, y + 1, z)
-
-    # Move down/forward one
-    bot.setPos(x + 1, y - 1, z)
-    x, y, z = bot.getPos()
+# while True:
+#     bot.setPos(x, y, z)
+#
+#     # break block in front / below
+#     mc.breakBlockNaturally(x + 1, y - 1, z)
+#     # break block above that
+#     mc.breakBlockNaturally(x + 1, y, z)
+#     mc.breakBlockNaturally(x + 1, y + 1, z)
+#
+#     # Move down/forward one
+#     bot.setPos(x + 1, y - 1, z)
+#     x, y, z = bot.getPos()
 
 
 # while True:

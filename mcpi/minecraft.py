@@ -85,7 +85,11 @@ class CmdEntity(CmdPositioner):
     """Methods for entities"""
 
     def __init__(self, connection, id=None):
+        self.id = id
         CmdPositioner.__init__(self, connection, b"entity", id)
+
+    def freeze(self, id=None):
+        self.conn.send(self.pkg + b".freeze", self.id or id)
 
 
 class CmdPlayer(CmdPositioner):

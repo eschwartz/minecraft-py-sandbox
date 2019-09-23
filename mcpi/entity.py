@@ -25,6 +25,7 @@ class Entity:
         return "Entity(%d, %d)" % (self.id, self.data)
 
 
+ENDERMAN = Entity(58)
 SHEEP = Entity(91)
 PARROT = Entity(105)
 LLAMA = Entity(103)
