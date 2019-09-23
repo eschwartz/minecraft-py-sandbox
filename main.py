@@ -1,6 +1,6 @@
 from time import sleep
 
-from mcpi.entity import SHEEP, PARROT, LLAMA, ENDERMAN
+from mcpi.entity import SHEEP, PARROT, LLAMA, ENDERMAN, OCELOT
 from mcpi.minecraft import Minecraft
 
 
@@ -13,25 +13,19 @@ def break_target():
 ec2_server_ip = "3.222.216.215"
 mc = Minecraft.create(address=ec2_server_ip)
 flower = 38
-#
-# while True:
-#     x, y, z = mc.player.getPos()
-#     print(f"X: {x}, Y: {y}, Z: {z}")
-#     try:
-#         bot = mc.spawnEntity(x + 1, y, z, LLAMA)
-#         if bot.id:
-#             print(f"Created animal {bot.id}")
-#             break
-#     except:
-#         pass
-#
-# sleep(3)
-
-
-myX, myY, myZ = mc.player.getPos()
 while True:
-    mc.spawnEntity(myX, myY + 300, myZ, LLAMA)
-    sleep(2)
+    x, y, z = mc.player.getPos()
+    print(f"X: {x}, Y: {y}, Z: {z}")
+    try:
+        bot = mc.spawnEntity(x + 1, y, z, PARROT)
+        bot.freeze()
+        if bot.id:
+            print(f"Created animal {bot.id}")
+            break
+    except:
+        pass
+
+sleep(3)
 
 
 # Current status:
@@ -47,18 +41,30 @@ while True:
 #   or, we need something with a custom entity, and dig into that entity code to
 #   see what can be hacked
 
-# while True:
-#     bot.setPos(x, y, z)
-#
-#     # break block in front / below
-#     mc.breakBlockNaturally(x + 1, y - 1, z)
-#     # break block above that
-#     mc.breakBlockNaturally(x + 1, y, z)
-#     mc.breakBlockNaturally(x + 1, y + 1, z)
-#
-#     # Move down/forward one
-#     bot.setPos(x + 1, y - 1, z)
-#     x, y, z = bot.getPos()
+print('starting loop')
+while True:
+    x, y, z = bot.getPos()
+    # break block in front / below
+    print(f"{x}, {y}, {z}")
+
+    # break three blocks for next stair
+    mc.breakBlockNaturally(x, y, z)
+    mc.breakBlockNaturally(x, y, z + 1)
+    mc.breakBlockNaturally(x, y, z - 1)
+    mc.breakBlockNaturally(x, y - 1, z)
+    mc.breakBlockNaturally(x, y - 1, z + 1)
+    mc.breakBlockNaturally(x, y - 1, z - 1)
+    mc.breakBlockNaturally(x + 1, y, z)
+    mc.breakBlockNaturally(x + 1, y, z + 1)
+    mc.breakBlockNaturally(x + 1, y, z - 1)
+    mc.breakBlockNaturally(x + 1, y - 1, z)
+    mc.breakBlockNaturally(x + 1, y - 1, z + 1)
+    mc.breakBlockNaturally(x + 1, y - 1, z - 1)
+    sleep(1)
+
+    # move down stair
+    bot.setPos(x + 1, y - 1, z)
+    sleep(1)
 
 
 # while True:
