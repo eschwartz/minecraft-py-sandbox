@@ -42,15 +42,21 @@ sleep(3)
 #   see what can be hacked
 
 print('starting loop')
+
+
+x, y, z = bot.getPos()
+print(f"{x}, {y}, {z}")
+
+
+# This one works pretty well. But could use a `setBlock(dirt)` in case
+# we run into a cave.
+# I would like to understand why they die if I don't clear enough bricks
 while True:
     x, y, z = bot.getPos()
     # break block in front / below
     print(f"{x}, {y}, {z}")
 
     # break three blocks for next stair
-    mc.breakBlockNaturally(x, y, z)
-    mc.breakBlockNaturally(x, y, z + 1)
-    mc.breakBlockNaturally(x, y, z - 1)
     mc.breakBlockNaturally(x, y - 1, z)
     mc.breakBlockNaturally(x, y - 1, z + 1)
     mc.breakBlockNaturally(x, y - 1, z - 1)
@@ -64,6 +70,11 @@ while True:
 
     # move down stair
     bot.setPos(x + 1, y - 1, z)
+    sleep(1)
+
+    # place torch
+    mc.setBlock(x - 1, y - 1, z + 1, 50)
+    mc.setBlock(x - 1, y - 1, z - 1, 50)
     sleep(1)
 
 

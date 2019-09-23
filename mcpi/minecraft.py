@@ -200,7 +200,7 @@ class Minecraft:
         self.conn.send(b"world.setBlock", intFloor(args))
 
     def breakBlockNaturally(self, *args):
-        self.conn.send(b"block.breakNaturally", intFloor(args))
+        self.conn.send(b"block.breakNaturally", args)
 
     def setBlocks(self, *args):
         """Set a cuboid of blocks (x0,y0,z0,x1,y1,z1,id,[data])"""
