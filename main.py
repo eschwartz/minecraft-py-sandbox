@@ -60,22 +60,33 @@ while True:
     mc.breakBlockNaturally(x, y - 1, z)
     mc.breakBlockNaturally(x, y - 1, z + 1)
     mc.breakBlockNaturally(x, y - 1, z - 1)
+    mc.breakBlockNaturally(x, y + 1, z)
+    mc.breakBlockNaturally(x, y + 1, z + 1)
+    mc.breakBlockNaturally(x, y + 1, z - 1)
+    mc.breakBlockNaturally(x, y + 2, z)
+    mc.breakBlockNaturally(x, y + 2, z + 1)
+    mc.breakBlockNaturally(x, y + 2, z - 1)
     mc.breakBlockNaturally(x + 1, y, z)
     mc.breakBlockNaturally(x + 1, y, z + 1)
     mc.breakBlockNaturally(x + 1, y, z - 1)
     mc.breakBlockNaturally(x + 1, y - 1, z)
     mc.breakBlockNaturally(x + 1, y - 1, z + 1)
     mc.breakBlockNaturally(x + 1, y - 1, z - 1)
-    sleep(1)
+    sleep(0.2)
 
     # move down stair
     bot.setPos(x + 1, y - 1, z)
-    sleep(1)
+    sleep(0.2)
 
     # place torch
     mc.setBlock(x - 1, y - 1, z + 1, 50)
     mc.setBlock(x - 1, y - 1, z - 1, 50)
-    sleep(1)
+    sleep(0.2)
+
+    # place blocks
+    mc.setBlock(x - 2, y - 2, z, 1)
+    mc.setBlock(x - 2, y - 2, z + 1, 1)
+    mc.setBlock(x - 2, y - 2, z - 1, 1)
 
 
 # while True:
